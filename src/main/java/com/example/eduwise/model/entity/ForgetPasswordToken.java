@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 @Builder
-@Table
+@Table(schema = "driver",name = "forgetPasswordToken")
 @Entity
 public class ForgetPasswordToken {
 

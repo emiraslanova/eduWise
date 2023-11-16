@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @ToString
-@Table
+@Table(schema = "driver",name = "orders")
 @Entity
 
 public class Orders {

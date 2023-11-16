@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @ToString
-@Table
+@Table(schema = "driver",name = "confirmationToken")
 @Entity
 
 public class ConfirmationToken {

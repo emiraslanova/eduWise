@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @ToString
-@Table
+@Table(schema = "driver",name = "blog")
 @Entity
 public class Blog {
     @Id

@@ -10,7 +10,7 @@ import org.hibernate.validator.constraints.CreditCardNumber;
 @NoArgsConstructor
 @Builder
 @ToString
-@Table
+@Table(schema = "driver",name = "message")
 @Entity
 
 public class Message {

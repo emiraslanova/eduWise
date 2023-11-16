@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 @Builder
-@Table
+@Table(schema = "driver",name = "basket")
 @Entity
 public class Basket {
 
@@ -32,6 +32,6 @@ public class Basket {
     @OneToMany
     private List <User> users;
 
-    @OneToOne
-    private  User user;
+//    @OneToOne
+//    private  User user;
 }

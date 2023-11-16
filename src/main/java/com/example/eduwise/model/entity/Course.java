@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 @ToString
-@Table
+@Table(schema = "driver",name = "course")
 @Entity
 public class Course {
     @Id

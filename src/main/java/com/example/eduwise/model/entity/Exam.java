@@ -11,11 +11,12 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 @ToString
-@Table
+@Table(schema = "driver",name = "exam")
 @Entity
 public class Exam {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
     @Column(name = "exam_name")
     private String examName;

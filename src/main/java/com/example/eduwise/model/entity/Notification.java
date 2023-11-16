@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 @Builder
-@Table
+@Table(schema = "driver",name = "notification")
 @Entity
 public class Notification {
     @Id

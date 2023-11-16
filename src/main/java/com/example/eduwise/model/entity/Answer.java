@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 @Builder
-@Table
+@Table(schema = "driver",name = "answer")
 @Entity
 public class Answer {
     @Id

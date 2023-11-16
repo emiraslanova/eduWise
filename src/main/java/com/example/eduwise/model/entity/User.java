@@ -14,14 +14,14 @@ import java.util.Set;
 @AllArgsConstructor
 @ToString
 @Builder
-@Table
+@Table(schema = "driver",name = "user")
 @Entity
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
+
     @Column(name = "name")
     private String name;
 
@@ -45,7 +45,7 @@ public class User {
     private  LocalDate registrationDate;
 
     @ManyToMany
-    @JoinTable(schema = "Driver",
+    @JoinTable(schema = "driver",
             name = "user",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "course_id")
@@ -53,8 +53,9 @@ public class User {
 
     private Set<Course> courseset;
 
-    @OneToMany
-    private List<Certificate>certificates;
+
+    @OneToMany(mappedBy = "user")
+    private List<Certificate> certificates;
 
 
     @OneToMany
