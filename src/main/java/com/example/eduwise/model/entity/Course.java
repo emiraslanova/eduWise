@@ -53,7 +53,7 @@ public class Course {
     private String courseLink;
 
 
-    private int duration;
+    private double duration;
 
     @Column(name = "instructor")
     private String instructor;

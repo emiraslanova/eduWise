@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Getter
 @Setter
@@ -12,24 +11,32 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 @Builder
-@Table(schema = "driver",name = "certificate")
+@Table(schema = "driver", name = "certificate")
 @Entity
 public class Certificate {
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private int id ;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
     @Column(name = "issue_date")
     private LocalDate issueDate;
 
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+//    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+//    @JoinColumns({
+//            @JoinColumn(name = "user_id", referencedColumnName = "id")
+//
+//    })
+//    private User user;
 
     @ManyToOne
-    @JoinColumn(name = "course_id")
-    private  Course course;
+    @JoinColumn(name = "user_id",referencedColumnName = "id")
+    private User user;
+
+
+    @ManyToOne
+    @JoinColumn(name = "course_id",referencedColumnName = "id")
+    private Course course;
     //user id
     //course id
 

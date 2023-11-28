@@ -3,6 +3,8 @@ package com.example.eduwise.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -21,4 +23,7 @@ public class Category {
 
     @Column(name = "description")
     private  String description;
+
+    @OneToMany
+    List<Blog> blogs;
 }

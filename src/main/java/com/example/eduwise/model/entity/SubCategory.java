@@ -14,12 +14,12 @@ import lombok.*;
 public class SubCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int SubCategoryId;
+    private int id;
 
     @Column(name = "subcategory_name")
     private String SubCategoryName;
 
-    @Column(name = "desc")
+    @Column(name = "description")
     private String description;
 
     @ManyToOne

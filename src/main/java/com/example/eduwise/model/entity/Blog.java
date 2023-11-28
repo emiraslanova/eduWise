@@ -30,7 +30,7 @@ public class Blog {
     @Column(name = "publish_data")
     private String publishData;
 
-    @OneToMany
-    private List<Category>categories;
+    @ManyToOne
+    private Category category;
     //category id
 }

@@ -11,7 +11,7 @@ import java.util.Set;
 @AllArgsConstructor
 @ToString
 @Builder
-@Table(schema = "driver",name = "statistics")
+@Table(schema = "driver",name = "role")
 @Entity
 public class Role {
     @Id
@@ -23,10 +23,10 @@ public class Role {
 
 
     @ManyToMany
-    @JoinTable(schema = "Driver",
-            name = "Role",
-            joinColumns = @JoinColumn(name = "Role_id"),
-            inverseJoinColumns = @JoinColumn(name = "User")
+    @JoinTable(schema = "driver",
+            name = "users_role",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
     )
 
     private Set<User> users;
