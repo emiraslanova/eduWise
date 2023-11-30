@@ -29,11 +29,9 @@ public class Notification {
 
     @ManyToOne
     private User user;
-    //user id
-    @ManyToOne
 
+    @ManyToOne
     private Course course;
-    //course id
 
 
 }

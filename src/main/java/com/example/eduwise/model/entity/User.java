@@ -48,16 +48,22 @@ public class User implements UserDetails {
     @Column(name = "registration_date")
     private  LocalDate registrationDate;
 
+    @Column(name = "account_non_expired")
     private boolean accountNonExpired;
 
+    @Column(name = "account_non_locked")
     private boolean accountNonLocked;
 
+   @Column(name = "credentials_non_expired")
     private  boolean credentialsNonExpired;
 
+   @Column(name = "enabled")
     private boolean enabled;
 
+   @Column(name = "username")
     private String username;
 
+   @Column(name = "uuid")
     private UUID uuid;
 
 

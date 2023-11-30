@@ -92,7 +92,7 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         org.springframework.security.core.userdetails.User user = new org.springframework.security.core.userdetails.User(
-                username, encoder.encode("guVenli55"), Collections.emptyList());
+                username, encoder.encode("sscjgfzeswhpyucj"), Collections.emptyList());
         return user;
     }
 }
