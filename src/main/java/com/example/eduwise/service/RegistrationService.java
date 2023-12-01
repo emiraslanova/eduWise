@@ -6,15 +6,19 @@ import com.example.eduwise.mapper.UserMapper;
 import com.example.eduwise.model.dto.RegistrationDto;
 import com.example.eduwise.model.entity.User;
 import com.example.eduwise.repository.UserRepository;
-import org.springframework.mail.MailSender;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
+
 import java.util.Optional;
 import java.util.Queue;
 import java.util.UUID;
-
+import java.util.concurrent.ConcurrentLinkedQueue;
+@Slf4j
 @Service
 public class RegistrationService {
 
@@ -22,12 +26,17 @@ public class RegistrationService {
 
     private final UserMapper userMapper;
 
-    private final MailSender mailSender;
-    private Queue<SimpleMailMessage>queue=new LinkedList<>();
+    private final JavaMailSender mailSender;
+    private  Queue<SimpleMailMessage>queue=new ConcurrentLinkedQueue<>();
 
+    @Value("${app.registration.base-path}")
     private String baseUrl ;
 
-    public RegistrationService(UserRepository userRepository, UserMapper userMapper, MailSender mailSender) {
+    private boolean isSending = true;
+
+
+
+    public RegistrationService(UserRepository userRepository, UserMapper userMapper, JavaMailSender mailSender) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.mailSender = mailSender;
@@ -35,15 +44,19 @@ public class RegistrationService {
 
 
     public void register(RegistrationDto registrationDto) {
-       User user = Optional.of(registrationDto).map(userMapper::toUser)
-                .map(userRepository::save).orElseThrow();
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(registrationDto.getUsername());
-        mailMessage.setFrom("minavar@div.edu.az");
+       User user = Optional.of(registrationDto)
+               .map(userMapper::toUser)
+               .map(userRepository::save)
+               .orElseThrow();
+        SimpleMailMessage mailMessage = new SimpleMailMessage();mailMessage.setTo(registrationDto.getUsername());
+        mailMessage.setFrom("amiraslanovamina1996@gmail.com");
         mailMessage.setSubject("registration confirmation");
         mailMessage.setText(baseUrl + "/registration/confirmation" + user.getUuid());
         queue.add(mailMessage);
-      //  mailSender.send(mailMessage);
+        isSending=true;
+
+
+       // mailSender.send(mailMessage);
 
 
     }
@@ -58,10 +71,18 @@ public class RegistrationService {
         user.setEnabled(true);
         userRepository.save(user);
     }
+    @Scheduled(fixedDelay = 5000)
     public void  sendMail(){
-        while (!queue.isEmpty()){
+        log.info("starting...");
+        while (! isSending && !queue.isEmpty()){
+            log.info("found email...");
+            isSending =true;
+            log.info("sending...");
             mailSender.send(queue.poll());
+            log.info("sent 1");
         }
+        isSending= false;
+        log.info("sending finished");
 
     }
 }

@@ -25,7 +25,7 @@ public abstract  class UserMapper  {
     public abstract   List<UserDto> toUserDtoList(List<User>users);
 
 
-     @Mapping(target = "enabled", constant = "false")
+     @Mapping(target = "enabled", constant = "true")
      @Mapping(target = "credentialsNonExpired", constant = "true")
      @Mapping(target = "accountNonLocked", constant = "true")
      @Mapping(target = "accountNonExpired", constant = "true")
