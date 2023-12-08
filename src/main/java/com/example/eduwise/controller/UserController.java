@@ -5,6 +5,8 @@ import com.example.eduwise.response.BaseResponse;
 import com.example.eduwise.service.UserService;
 import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,13 +25,14 @@ public class UserController {
     @PermitAll
     public BaseResponse<UserDto> creatUser(@Valid @RequestBody UserDto userDto) {
         try {
-            return BaseResponse.ok( userService.creatUser(userDto));
+            return BaseResponse.ok(userService.creatUser(userDto));
         } catch (Exception ex) {
             return BaseResponse.fail();
         }
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('USER')")
     public List<UserDto> getAllUser() {
         return userService.getAllUser();
     }

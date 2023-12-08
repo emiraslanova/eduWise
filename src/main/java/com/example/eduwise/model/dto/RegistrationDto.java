@@ -1,5 +1,6 @@
 package com.example.eduwise.model.dto;
 
+import com.example.eduwise.enums.Role;
 import lombok.*;
 
 @Getter
@@ -9,11 +10,12 @@ import lombok.*;
 @Builder
 public class RegistrationDto {
 
-    private  String username;
+    private String username;
 
-    private  String password;
+    private String password;
 
-    private  String confirmPassword;
+    private String confirmPassword;
+    private Role role;
 
 
 }

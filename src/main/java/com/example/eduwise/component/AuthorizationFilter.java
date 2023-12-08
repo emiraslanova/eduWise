@@ -16,11 +16,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
 import static org.springframework.security.authentication.UsernamePasswordAuthenticationToken.authenticated;
-
 
 public class AuthorizationFilter extends BasicAuthenticationFilter {
     @Value("${app.jwt.secret}")

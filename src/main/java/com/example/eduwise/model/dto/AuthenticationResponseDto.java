@@ -1,12 +1,13 @@
 package com.example.eduwise.model.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@Builder
 public class AuthenticationResponseDto {
     private String authToken;
 }

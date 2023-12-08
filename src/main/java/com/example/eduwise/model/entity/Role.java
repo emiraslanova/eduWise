@@ -24,16 +24,15 @@ public class Role {
     private String name ;
 
 
-    @ManyToMany
-    @JoinTable(schema = "driver",
-            name = "users_role",
-            joinColumns = @JoinColumn(name = "role_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-
+    @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 
-    @ManyToMany(fetch = FetchType.EAGER )
-    private List<Permission> permission = new ArrayList<>();
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "role_permission",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id")
+    )
+    private List<Permission> permissions;
 
 }

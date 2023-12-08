@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -19,7 +20,7 @@ import java.util.*;
 @AllArgsConstructor
 @ToString
 @Builder
-@Table(schema = "driver",name = "user")
+@Table(schema = "driver", name = "user")
 @Entity
 public class User implements UserDetails {
     @Id
@@ -73,6 +74,8 @@ public class User implements UserDetails {
     private UUID uuid;
 
     private UUID resetToken;
+    @Enumerated(EnumType.STRING)
+    private com.example.eduwise.enums.Role role;
 
 
     @ManyToMany
@@ -96,25 +99,35 @@ public class User implements UserDetails {
     @ManyToOne
     private ExamResults examResults;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    private List<Role> roles = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles;
 
 
+    //    @Transactional
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        return roles.stream()
+//                .map(Role::getPermissions)
+//                .flatMap(Collection::stream)
+//                .map(Permission::getName)
+//                .distinct()
+//                .map(SimpleGrantedAuthority::new)
+//                .toList();
     @Override
+
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream()
-                .map(Role::getPermission)
-                .flatMap(Collection::stream)
-                .map(Permission::getName)
-                .distinct()
-                .map(SimpleGrantedAuthority::new)
-                .toList();
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
+
     private String otpCode;
     @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime tokenCreationDate;
-
-
 
 
 }
