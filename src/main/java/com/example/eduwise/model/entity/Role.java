@@ -3,6 +3,8 @@ package com.example.eduwise.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -31,5 +33,7 @@ public class Role {
 
     private Set<User> users;
 
+    @ManyToMany(fetch = FetchType.EAGER )
+    private List<Permission> permission = new ArrayList<>();
 
 }

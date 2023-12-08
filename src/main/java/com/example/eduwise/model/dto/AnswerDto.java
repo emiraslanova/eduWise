@@ -10,6 +10,8 @@ import lombok.*;
 @Builder
 public class AnswerDto {
 
+    private String answerText;
+
     private String optionA;
 
     private String optionB;

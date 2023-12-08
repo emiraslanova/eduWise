@@ -3,8 +3,11 @@ package com.example.eduwise.controller;
 import com.example.eduwise.model.dto.AnswerDto;
 import com.example.eduwise.response.BaseResponse;
 import com.example.eduwise.service.AnswerService;
+import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/answers")
@@ -19,6 +22,7 @@ public class AnswerController {
 
 
     @PostMapping
+    @PermitAll
     public BaseResponse<AnswerDto> creatAnswer(@Valid @RequestBody AnswerDto answerDto){
         try {
             return BaseResponse.ok(answerService.creatAnswer(answerDto));
@@ -28,7 +32,7 @@ public class AnswerController {
 
     }
     @GetMapping
-    public  BaseResponse<AnswerDto> getAllAnswer(){
+    public List<AnswerDto> getAllAnswer(){
         return answerService.getAllAnswer();
     }
 

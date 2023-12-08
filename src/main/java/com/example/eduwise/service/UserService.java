@@ -5,6 +5,7 @@ import com.example.eduwise.mapper.UserMapper;
 import com.example.eduwise.model.dto.UserDto;
 import com.example.eduwise.model.entity.User;
 import com.example.eduwise.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,14 +19,31 @@ import java.util.Optional;
 @Service
 public class UserService implements UserDetailsService {
 
-    private final UserRepository userRepository;
-    private final UserMapper userMapper;
+    private UserRepository userRepository;
+    private UserMapper userMapper;
 
-    private  final PasswordEncoder encoder;
+    @Autowired
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @Autowired
+    public void setUserMapper(UserMapper userMapper) {
+        this.userMapper = userMapper;
+    }
+
+    @Autowired
+
+    public void setEncoder(PasswordEncoder encoder) {
+        this.encoder = encoder;
+    }
+
+    private PasswordEncoder encoder;
 
     public UserService(UserRepository userRepository, UserMapper userMapper, PasswordEncoder encoder) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+
         this.encoder = encoder;
     }
 
@@ -67,23 +85,24 @@ public class UserService implements UserDetailsService {
             throw new UserException("User not updated,id" + ex.getMessage());
         }
     }
-        private void updateUserFields (User oldUser, User newUser){
-            oldUser.setName(newUser.getName());
-            oldUser.setSurname(newUser.getSurname());
-            oldUser.setEmail(newUser.getEmail());
-            oldUser.setPhoneNumber(newUser.getPhoneNumber());
-            oldUser.setPassword(newUser.getPassword());
-            oldUser.setBirthdate(newUser.getBirthdate());
-            oldUser.setRegistrationDate(newUser.getRegistrationDate());
-        }
+
+    private void updateUserFields(User oldUser, User newUser) {
+        oldUser.setName(newUser.getName());
+        oldUser.setSurname(newUser.getSurname());
+        oldUser.setEmail(newUser.getEmail());
+        oldUser.setPhoneNumber(newUser.getPhoneNumber());
+        oldUser.setPassword(newUser.getPassword());
+        oldUser.setBirthdate(newUser.getBirthdate());
+        oldUser.setRegistrationDate(newUser.getRegistrationDate());
+    }
 
 
     public void deleteUser(Integer id) {
         try {
             userRepository.deleteById(id);
 
-        }catch (Exception ex){
-            throw new UserException("User not delete"+ex.getMessage());
+        } catch (Exception ex) {
+            throw new UserException("User not delete" + ex.getMessage());
         }
 
 
@@ -91,8 +110,27 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        org.springframework.security.core.userdetails.User user = new org.springframework.security.core.userdetails.User(
-                username, encoder.encode("123456789"), Collections.emptyList());
-        return user;
+        return userRepository.findByUsername(username).orElse(null);
+    }
+
+    public void increaseAttemptCount(String username) {
+        userRepository.findByUsername(username)
+                .ifPresent(user -> {
+                    int attemptCount = user.getAttemptCount();
+                    if (attemptCount > 2) {
+                        user.setAccountNonLocked(false);
+                    }
+                    user.setAttemptCount(attemptCount + 1);
+
+                    userRepository.save(user);
+                });
+    }
+
+    public void resetAttempts(String username) {
+        userRepository.findByUsername(username)
+                .ifPresent(user -> {
+                    user.setAttemptCount(0);
+                    userRepository.save(user);
+                });
     }
 }

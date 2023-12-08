@@ -6,8 +6,11 @@ import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Getter
@@ -21,7 +24,7 @@ import java.util.*;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  int id ;
+    private int id;
 
     @Column(name = "name")
     private String name;
@@ -36,9 +39,9 @@ public class User implements UserDetails {
     @Pattern(regexp = "[0-9]{3}+[0-9]{3}+[0-9]{2}+[0-9]{2}")
     private String phoneNumber;
 
-   // @Pattern(regexp = "A-Za-z0-9 ")
+    // @Pattern(regexp = "A-Za-z0-9 ")
     // "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$")
-   // @Min(8)
+    // @Min(8)
     @Column(name = "password")
     private String password;
 
@@ -46,7 +49,7 @@ public class User implements UserDetails {
     private LocalDate birthdate;
 
     @Column(name = "registration_date")
-    private  LocalDate registrationDate;
+    private LocalDate registrationDate;
 
     @Column(name = "account_non_expired")
     private boolean accountNonExpired;
@@ -54,20 +57,22 @@ public class User implements UserDetails {
     @Column(name = "account_non_locked")
     private boolean accountNonLocked;
 
-   @Column(name = "credentials_non_expired")
-    private  boolean credentialsNonExpired;
+    @Column(name = "credentials_non_expired")
+    private boolean credentialsNonExpired;
 
-   @Column(name = "enabled")
+    @Column(name = "attempt_count")
+    private Integer attemptCount;
+
+    @Column(name = "enabled")
     private boolean enabled;
 
-   @Column(name = "username")
+    @Column(name = "username")
     private String username;
 
-   @Column(name = "uuid")
+    @Column(name = "uuid")
     private UUID uuid;
 
-
-
+    private UUID resetToken;
 
 
     @ManyToMany
@@ -86,33 +91,49 @@ public class User implements UserDetails {
 
 
     @OneToMany
-    private List<Exam>exams;
+    private List<Exam> exams;
 
     @ManyToOne
     private ExamResults examResults;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<Role> roles = new ArrayList<>();
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList();
+        return roles.stream()
+                .map(Role::getPermission)
+                .flatMap(Collection::stream)
+                .map(Permission::getName)
+                .distinct()
+                .map(SimpleGrantedAuthority::new)
+                .toList();
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    private String otpCode;
+    @Column(columnDefinition = "TIMESTAMP")
+    private LocalDateTime tokenCreationDate;
 
 
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
