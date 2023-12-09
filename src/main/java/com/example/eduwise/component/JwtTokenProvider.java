@@ -21,5 +21,4 @@ public class JwtTokenProvider {
                 .sign(Algorithm.HMAC256(secret.getBytes()));
     }
 
-    // Diğer metotlar (token çözme, doğrulama, vb.)
 }

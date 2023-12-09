@@ -1,6 +1,7 @@
 package com.example.eduwise.model.dto;
 
 import com.example.eduwise.enums.Role;
+import jakarta.persistence.Column;
 import lombok.*;
 
 @Getter
@@ -10,6 +11,8 @@ import lombok.*;
 @Builder
 public class RegistrationDto {
 
+
+    @Column(unique = true)
     private String username;
 
     private String password;

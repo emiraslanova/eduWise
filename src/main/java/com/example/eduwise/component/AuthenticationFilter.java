@@ -30,9 +30,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     @Value("${app.jwt.secret}")
     private final String secret;
-    private String generatedToken;  // JWT'yi saklamak için bir değişken ekledik
-
-    // Diğer metotlar
+    private String generatedToken;
 
     public String getGeneratedToken() {
         return generatedToken;
